@@ -71,7 +71,7 @@ type PostmetaEdge {
 
 type Root {
   viewer: User
-  posts(post_type: String = "post", after: String, first: Int, before: String, last: Int): PostConnection
+  page(post_name: String): Post
 }
 
 type Setting {

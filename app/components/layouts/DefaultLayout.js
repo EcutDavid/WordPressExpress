@@ -10,10 +10,9 @@ import styles from '../pages/page.scss';
 class DefaultLayout extends React.Component{
 
   render(){
+    console.log(this.props);
     const { viewer } = this.props;
     const { post_title, post_content, thumbnail } = viewer.page;
-
-    console.log(viewer);
 
     let bg = {
       backgroundImage: "url('" + thumbnail + "')"
@@ -22,7 +21,7 @@ class DefaultLayout extends React.Component{
     let heroClass = thumbnail ? "hero_thumbnail" : "hero"
 
     return(
-    	<Page>
+    	<div>
         <div styleName={heroClass} style={bg}>
 					<div styleName="wrapper tight">
             <h2 styleName="title">{post_title}</h2>
@@ -34,7 +33,7 @@ class DefaultLayout extends React.Component{
 						<PostContent post_content={post_content}/>
 					</div>
 				</div>
-      </Page>
+      </div>
     )
   }
 }
@@ -48,8 +47,9 @@ export default Relay.createContainer(DefaultLayout, {
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
+        ${ function(){ console.log('default layout query ran') }},
         page(post_name:$page){
-          id,
+          id
           post_title
           post_content
           thumbnail

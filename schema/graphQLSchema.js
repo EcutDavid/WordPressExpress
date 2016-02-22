@@ -215,19 +215,15 @@ function WordExpressGraphQLSchema(ConnQueries, publicSettings){
           return ConnQueries.getViewer();
         }
       },
-      posts: {
-        type: PostsConnection,
-        args: {
-          post_type: {
-            type: GraphQLString,
-            defaultValue: 'post'
-          },
-          ...connectionArgs
+      page: {
+        type: GraphQLPost,
+        args:{
+          post_name:{ type: GraphQLString },
         },
-        resolve(root, args) {
-          return connectionFromPromisedArray( ConnQueries.getPosts(args), args );
+        resolve(root, args){
+          return ConnQueries.getPostByName(args.post_name);
         }
-      }
+      },
     }
   });
 

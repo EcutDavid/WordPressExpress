@@ -13,9 +13,10 @@ class PostList extends React.Component{
   }
 
   componentWillMount(){
-    const { limit, postType } = this.props.route.layout;
+    const { limit, postType } = this.props.layout;
 
     this.props.relay.setVariables({
+      page: this.props.page,
       limit: limit,
       postType: postType
     })
@@ -23,12 +24,13 @@ class PostList extends React.Component{
   }
 
   render(){
+    console.log('post list viewer:',this.props.viewer);
     const { posts } = this.props.viewer;
-    const { hasNextPage, hasPreviousPage } = posts.pageInfo;
 
     if (posts){
+      const { hasNextPage, hasPreviousPage } = posts.pageInfo;
       return(
-        <Page>
+        <div>
           {posts.edges.map( (post, index) => {
             return(
               <PostExcerpt index={index} key={post.node.id} viewer={this.props.viewer} {...post.node} />
@@ -38,12 +40,11 @@ class PostList extends React.Component{
           { hasNextPage &&
             <Button type="primary center" onClick={this._loadMorePosts}>Load More</Button>
           }
-
-        </Page>
+        </div>
       )
     } else {
       return(
-        <Page>Loading</Page>
+        <div>Loading...</div>
       )
     }
   }
@@ -68,10 +69,6 @@ export default Relay.createContainer(PostList, {
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
-        page(post_name:"homepage"){
-					id,
-					thumbnail
-				},
         posts(post_type: $postType first: $limit){
 					edges{
             cursor

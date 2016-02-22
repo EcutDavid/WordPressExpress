@@ -14,7 +14,7 @@ class FrontPageLayout extends React.Component{
 		let heroClass = thumbnail ? "hero_thumbnail" : "hero"
 
 		return (
-			<Page>
+			<div>
 				<div styleName={heroClass} style={bg}>
 					<div styleName="wrapper tight">
 						<h1 styleName="title">WordExpress</h1>
@@ -27,7 +27,7 @@ class FrontPageLayout extends React.Component{
 						<PostContent post_content={post_content}/>
 					</div>
 				</div>
-			</Page>
+			</div>
 		)
 	}
 }

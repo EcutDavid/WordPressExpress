@@ -19,4 +19,5 @@ const Database = new WordExpressDatabase(connectionDetails);
 const ConnQueries = Database.queries;
 const Schema = WordExpressGraphQLSchema(ConnQueries, publicSettings);
 
+
 export default Schema;

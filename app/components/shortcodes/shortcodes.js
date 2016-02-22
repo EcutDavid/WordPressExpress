@@ -18,9 +18,7 @@ function GetShortCode(line){
 
   //turn params into key/value pairs
   _.map(params, param => {
-    console.log(param);
     const arr = param.split('=');
-    console.log(arr[1])
     shortcodeObj.params[arr[0]] = arr[1].slice(1,-1);
   })
 
