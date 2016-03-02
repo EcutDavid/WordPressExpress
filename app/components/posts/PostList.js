@@ -25,28 +25,25 @@ class PostList extends React.Component{
 
   render(){
     console.log('post list viewer:',this.props.viewer);
-    const { posts } = this.props.viewer;
+    const { viewer } = this.props;
+    const { posts } = viewer;
 
     if (posts){
       const { hasNextPage, hasPreviousPage } = posts.pageInfo;
-      return(
-        <div>
-          {posts.edges.map( (post, index) => {
-            return(
-              <PostExcerpt index={index} key={post.node.id} viewer={this.props.viewer} {...post.node} />
-            )
-          })}
-
-          { hasNextPage &&
-            <Button type="primary center" onClick={this._loadMorePosts}>Load More</Button>
-          }
-        </div>
-      )
-    } else {
-      return(
-        <div>Loading...</div>
-      )
     }
+
+    return posts == null ? null :
+      <div>
+        {posts.edges.map( (post, index) => {
+          return(
+            <PostExcerpt index={index} key={post.node.id} viewer={this.props.viewer} {...post.node} />
+          )
+        })}
+
+        { hasNextPage &&
+          <Button type="primary center" onClick={this._loadMorePosts}>Load More</Button>
+        }
+      </div>
   }
 
   _loadMorePosts(){

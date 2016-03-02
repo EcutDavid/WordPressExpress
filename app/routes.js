@@ -16,13 +16,6 @@ const AppQueries = {
   `,
 };
 
-// function renderFetched(data){
-//   console.log("data:",data)
-//   return(
-//     <Page {...data}/>
-//   )
-// }
-
 function setLayout(nextState, replaceState){
 
   const { pathname } = nextState.location;
