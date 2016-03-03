@@ -21,7 +21,7 @@ class Page extends React.Component{
 
     console.log(isPostList);
 
-    this.props.relay.setVariables({
+    this.props.relay.forceFetch({
       page: this.props.page,
       isDefault: isDefault,
       isPostList: isPostList
@@ -38,16 +38,22 @@ class Page extends React.Component{
 	}
 
 	render(){
-    console.log('render');
 		const { viewer, className } = this.props;
     const { page } = viewer;
-    const Layout = Layouts[page.layout.meta_value];
+    console.log('page:', page);
+    const Layout = Layouts[page.layout.meta_value] || Layouts['Default'];
 
-    return(
-			<div ref={ (c) => this._page = c } className={styles.base + ' ' + className}>
-        <Layout.Component viewer={viewer} page={page} layout={Layout}/>
-			</div>
-		)
+    if (Layout){
+      return(
+  			<div ref={ (c) => this._page = c } className={styles.base + ' ' + className}>
+          <Layout.Component viewer={viewer} page={page} layout={Layout}/>
+  			</div>
+  		)
+    } else {
+      return(
+        <div>Loading...</div>
+      )
+    }
 	}
 }
 
@@ -64,22 +70,25 @@ export default Relay.createContainer(Page, {
     isPostList: false
   },
 
+  prepareVariables(prevVars){
+    console.log('Previous Variables:', prevVars);
+    return{
+      ...prevVars,
+      isDefault: !!(prevVars.page && prevVars.isDefault),
+      isPostList: !!(prevVars.page && prevVars.isPostList)
+    }
+  },
+
   fragments: {
     viewer: (variables) => Relay.QL`
     fragment on User {
-      ${ () => {
-        const condition = variables.isPostList;
-        if (variables.page){
-          return (
-            COMPONENTS.map( ([Component, layout]) => {
-            console.log('mapping');
-            const condition = variables[layout];
-            return Component
-              .getFragment('viewer', {page: variables.page, isPostList: variables.isPostList})
-              .if(condition)
-          }))
-        }
-      }},
+      ${COMPONENTS.map( ([Component, layout]) => {
+        console.log(variables[layout]);
+        const condition = variables[layout];
+        return Component
+          .getFragment('viewer')
+          .if(variables[layout])
+      })},
       page(post_name:$page) {
         id
         layout{
