@@ -173,7 +173,7 @@ function WordExpressGraphQLSchema(ConnQueries, publicSettings){
           return connectionFromPromisedArray( ConnQueries.getPosts(args), args );
         }
       },
-      page: {
+      post: {
         type: GraphQLPost,
         args:{
           post_name:{ type: GraphQLString },
@@ -214,16 +214,7 @@ function WordExpressGraphQLSchema(ConnQueries, publicSettings){
         resolve: () => {
           return ConnQueries.getViewer();
         }
-      },
-      page: {
-        type: GraphQLPost,
-        args:{
-          post_name:{ type: GraphQLString },
-        },
-        resolve(root, args){
-          return ConnQueries.getPostByName(args.post_name);
-        }
-      },
+      }
     }
   });
 

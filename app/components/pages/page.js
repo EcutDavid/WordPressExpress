@@ -15,11 +15,9 @@ import styles from './page.scss';
 class Page extends React.Component{
 
   _setLayout(){
-    const Layout = this.props.viewer.page.layout.meta_value || 'DefaultLayout';
+    const Layout = this.props.viewer.post.layout.meta_value || 'DefaultLayout';
     const isDefault = Layout === 'DefaultLayout';
     const isPostList = Layout === 'PostList';
-
-    console.log(isPostList);
 
     this.props.relay.forceFetch({
       page: this.props.page,
@@ -39,21 +37,15 @@ class Page extends React.Component{
 
 	render(){
 		const { viewer, className } = this.props;
-    const { page } = viewer;
-    console.log('page:', page);
-    const Layout = Layouts[page.layout.meta_value] || Layouts['Default'];
+    const { post } = viewer;
+    const Layout = Layouts[post.layout.meta_value] || Layouts['Default'];
+    console.log('page rendering')
 
-    if (Layout){
-      return(
-  			<div ref={ (c) => this._page = c } className={styles.base + ' ' + className}>
-          <Layout.Component viewer={viewer} page={page} layout={Layout}/>
-  			</div>
-  		)
-    } else {
-      return(
-        <div>Loading...</div>
-      )
-    }
+    return(
+			<div ref={ (c) => this._page = c } className={styles.base + ' ' + className}>
+        <Layout.Component viewer={viewer} page={this.props.page} condition={true} layout={Layout}/>
+			</div>
+		)
 	}
 }
 
@@ -67,29 +59,21 @@ export default Relay.createContainer(Page, {
   initialVariables: {
     page: null,
     isDefault: false,
-    isPostList: false
+    isPostList: false,
   },
 
   prepareVariables(prevVars){
-    console.log('Previous Variables:', prevVars);
+    console.log(prevVars);
     return{
-      ...prevVars,
-      isDefault: !!(prevVars.page && prevVars.isDefault),
-      isPostList: !!(prevVars.page && prevVars.isPostList)
+      ...prevVars
     }
   },
 
   fragments: {
     viewer: (variables) => Relay.QL`
     fragment on User {
-      ${COMPONENTS.map( ([Component, layout]) => {
-        console.log(variables[layout]);
-        const condition = variables[layout];
-        return Component
-          .getFragment('viewer')
-          .if(variables[layout])
-      })},
-      page(post_name:$page) {
+      ${DefaultLayout.getFragment('viewer', {page: variables.page, condition: variables.isDefault})},
+      post(post_name: $page){
         id
         layout{
           id

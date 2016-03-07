@@ -52,7 +52,7 @@ export default Relay.createContainer(PostSingle, {
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
-        page(post_name:$post){
+        post(post_name:$post){
           id
           post_title
           post_content

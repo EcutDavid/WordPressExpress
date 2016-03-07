@@ -34,14 +34,14 @@ class PostContent extends React.Component{
   }
 
   _parseContent(){
-    const { post_content } = this.props;
-    const trimmed = post_content.trim();
-    const content = trimmed.split('\n');
+    const { content } = this.props;
+    const trimmed = content.trim();
+    const contentTrimmed = trimmed.split('\n');
     const voidTags = ["p","h1", "h2", "h3", "h4", "h5", "code", "pre", "img"];
     const shortcodes = ["caption", "embed"];
 
 
-    _.map(content, (line, index) => {
+    _.map(contentTrimmed, (line, index) => {
       if (line[0] === '['){
         let shortcode = line.match(/([[])\w+/g).toString().substr(1);
         if (shortcodes.indexOf(shortcode) >= 0){
@@ -55,11 +55,11 @@ class PostContent extends React.Component{
         }
       }
 
-      content[index] = line;
+      contentTrimmed[index] = line;
     });
 
     return {
-      __html: content.join('')
+      __html: contentTrimmed.join('')
     }
   }
 

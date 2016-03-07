@@ -14,26 +14,27 @@ class PostList extends React.Component{
 
   componentWillMount(){
     const { limit, postType } = this.props.layout;
+    console.log('mounting props:', this.props);
 
     this.props.relay.setVariables({
       page: this.props.page,
       limit: limit,
-      postType: postType
+      postType: postType,
+      condition: true
     })
 
   }
 
   render(){
-    console.log('post list viewer:',this.props.viewer);
+    // console.log('post list viewer:',this.props.viewer);
     const { viewer } = this.props;
     const { posts } = viewer;
 
-    if (posts){
-      const { hasNextPage, hasPreviousPage } = posts.pageInfo;
-    }
+    const { hasNextPage, hasPreviousPage } = posts.pageInfo;
 
-    return posts == null ? null :
+    return posts == null ? <div></div> :
       <div>
+
         {posts.edges.map( (post, index) => {
           return(
             <PostExcerpt index={index} key={post.node.id} viewer={this.props.viewer} {...post.node} />
@@ -59,8 +60,16 @@ class PostList extends React.Component{
 export default Relay.createContainer(PostList, {
 
   initialVariables: {
-    limit: 20,
-    postType: 'post'
+    limit: 10,
+    postType: 'post',
+    condition: true
+  },
+
+  prepareVariables(prevVars){
+    console.log('prev vars:', prevVars);
+    return{
+      ...prevVars
+    }
   },
 
   fragments: {

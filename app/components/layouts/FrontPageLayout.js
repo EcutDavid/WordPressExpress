@@ -36,7 +36,7 @@ export default Relay.createContainer(FrontPageLayout, {
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
-        page(post_name:"homepage"){
+        post(post_name:"homepage"){
 					id,
 					post_title
 					post_content

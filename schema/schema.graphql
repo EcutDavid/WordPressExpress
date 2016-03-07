@@ -71,7 +71,6 @@ type PostmetaEdge {
 
 type Root {
   viewer: User
-  page(post_name: String): Post
 }
 
 type Setting {
@@ -84,7 +83,7 @@ type User {
   id: ID!
   settings: Setting
   posts(post_type: String = "post", after: String, first: Int, before: String, last: Int): PostConnection
-  page(post_name: String): Post
+  post(post_name: String): Post
   menus(name: String): Menu
   postmeta(post_id: Int, after: String, first: Int, before: String, last: Int): PostmetaConnection
 }
