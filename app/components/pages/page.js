@@ -19,7 +19,7 @@ class Page extends React.Component{
     const isDefault = Layout === 'DefaultLayout';
     const isPostList = Layout === 'PostList';
 
-    this.props.relay.forceFetch({
+    this.props.relay.setVariables({
       page: this.props.page,
       isDefault: isDefault,
       isPostList: isPostList
@@ -36,14 +36,19 @@ class Page extends React.Component{
 	}
 
 	render(){
+    console.log(this.props.relay.route);
 		const { viewer, className } = this.props;
     const { post } = viewer;
     const Layout = Layouts[post.layout.meta_value] || Layouts['Default'];
-    console.log('page rendering')
 
     return(
 			<div ref={ (c) => this._page = c } className={styles.base + ' ' + className}>
-        <Layout.Component viewer={viewer} page={this.props.page} condition={true} layout={Layout}/>
+        <Layout.Component
+          viewer={viewer}
+          page={this.props.page}
+          condition={true}
+          layout={Layout}
+        />
 			</div>
 		)
 	}

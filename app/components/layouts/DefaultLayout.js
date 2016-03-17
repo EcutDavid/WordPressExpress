@@ -18,9 +18,9 @@ class DefaultLayout extends React.Component{
 
   render(){
     const { viewer } = this.props;
-    console.log(viewer);
 
     if (viewer.post){
+      console.log(viewer.post);
       const { post_title, post_content, thumbnail } = viewer.post;
 
       let bg = {
@@ -38,7 +38,6 @@ class DefaultLayout extends React.Component{
 
   				<div styleName="content">
   					<div styleName="wrapper tight">
-              <h1>Test</h1>
   						<PostContent content={post_content}/>
   					</div>
   				</div>
@@ -67,7 +66,7 @@ export default Relay.createContainer(DefaultLayout, {
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
-        post(post_name:$page){
+        post(post_name:$page) @include(if: $condition){
           id
           post_title
           post_content
