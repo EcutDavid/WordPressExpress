@@ -1,7 +1,6 @@
 import React from 'react';
 import Relay from 'react-relay'
 import { Link } from 'react-router';
-import AppNav from '../nav/_AppNav.js';
 import GithubLogo from '../icons/github.js';
 
 import CSSModules from 'react-css-modules';
@@ -16,7 +15,6 @@ class Header extends React.Component{
 		return (
 			<header styleName="base">
 				<div styleName="wrapper">
-					<AppNav viewer={viewer}/>
 					<a href="https://github.com/ramsaylanier/WordpressExpress" target="_blank">
 						<GithubLogo/>
 					</a>
